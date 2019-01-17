@@ -171,6 +171,8 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Translator";
             this.Load += new System.EventHandler(this.Form1_Load);

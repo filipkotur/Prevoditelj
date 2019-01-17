@@ -73,7 +73,9 @@ namespace WindowsFormsApplication2
             }
             tekst = textBox1.Text;
             tekst= Regex.Replace(textBox1.Text, @"[\d-]", "");
-            tekst = tekst.Replace(" ", "+");if (tekst.IndexOf("+") == 0) { tekst = tekst.Substring(1); }
+            tekst = tekst.Replace(" ", "+");
+            if (tekst.Length == tekst.LastIndexOf("+")) { tekst.Remove(tekst.Length - 1); }
+            if (tekst.IndexOf("+") == 0) { tekst = tekst.Substring(1); }
             link1 = tekst;
             int n = 0; int i = 0;int kon=0;
             for ( i = 1; i < 10; i++)
@@ -82,7 +84,6 @@ namespace WindowsFormsApplication2
                 link1 = link1.Substring(kon+1);
                 n = n + kon + 1;
             }
-            tekst =tekst.Substring(0,n+1);
             link = "http://context.reverso.net/translation/" + originalni + "-" + prevedeni + "/" + tekst ;
             WebClient client = new WebClient();
             link1 = client.DownloadString(link);
@@ -95,12 +96,7 @@ namespace WindowsFormsApplication2
             {
                 rezac2 = "lang"; i = 6; rezac = "="; n = 0;
             }
-            if (link1.IndexOf("split wide-container") == -1)
-            {
-                
-                result = "";
-            }
-            else
+            if (link1.IndexOf("split wide-container") != -1)
             {
                 while (link1.IndexOf("split wide-container") != -1)
                 {
@@ -113,6 +109,25 @@ namespace WindowsFormsApplication2
                     result = result + " " + link1.Substring(prvi + n, zadnji - prvi - n);
                 }
             }
+            if (link1.IndexOf("title=\"Other\">") != 1)
+            {
+                rezac = "</div>\">";
+                i = 7;
+                rezac2 = "examples with alignment)";
+                while (link1.IndexOf("title=\"Other\">") != -1)
+                {   
+                    int rezanje = link1.IndexOf("title=\"Other\">");
+                    link1 = link1.Substring(rezanje);
+                    rezanje = link1.IndexOf(rezac2);
+                    link1 = link1.Substring(rezanje);
+                    int prvi = link1.IndexOf(rezac) + i;
+                    int zadnji = link1.IndexOf("</a>");
+                    result = result + " " + link1.Substring(prvi + n, zadnji - prvi - n);
+                    while (result.IndexOf(" ") == 0) { result = result.Substring(1); }
+                }
+            }
+          
+            
             textBox2.Text = result;
         }
 
