@@ -67,9 +67,7 @@ namespace WindowsFormsApplication2
                 case "španjolski":
                     prevedeni = "spanish";
                     break;
-                case "poljski":
-                    originalni = "polish";
-                    break;
+                
             }
             tekst = textBox1.Text;
             tekst= Regex.Replace(textBox1.Text, @"[\d-]", "");
@@ -109,13 +107,13 @@ namespace WindowsFormsApplication2
                     result = result + " " + link1.Substring(prvi + n, zadnji - prvi - n);
                 }
             }
-            if (link1.IndexOf("title=\"Other\">") != 1)
+            else if (link1.IndexOf("title=\"Other\">") != -1)
             {
                 rezac = "</div>\">";
                 i = 7;
                 rezac2 = "examples with alignment)";
                 while (link1.IndexOf("title=\"Other\">") != -1)
-                {   
+                {
                     int rezanje = link1.IndexOf("title=\"Other\">");
                     link1 = link1.Substring(rezanje);
                     rezanje = link1.IndexOf(rezac2);
@@ -126,6 +124,21 @@ namespace WindowsFormsApplication2
                     while (result.IndexOf(" ") == 0) { result = result.Substring(1); }
                 }
             }
+            else //(link1.IndexOf("class=\"wide-container\">") != -1)
+            {
+                    i = 1;
+                    int rezanje = link1.IndexOf("class=\"wide-container\">");
+                    link1 = link1.Substring(rezanje);
+                    rezanje = link1.IndexOf("class='translation'");
+                    link1 = link1.Substring(rezanje);
+                    rezanje = link1.IndexOf("on'");
+                    link1 = link1.Substring(rezanje);
+                    int prvi = link1.IndexOf(">") + i;
+                    int zadnji = link1.IndexOf("<");
+                    result =  link1.Substring(prvi, zadnji - prvi);
+             }
+            
+            
           
             
             textBox2.Text = result;
