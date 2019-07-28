@@ -162,7 +162,7 @@
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Items.AddRange(new object[] {
             "Yandex",
-            "Google Cloud",
+            "IBM",
             "Reverso Context web stranica"});
             this.comboBox3.Location = new System.Drawing.Point(227, 170);
             this.comboBox3.Name = "comboBox3";

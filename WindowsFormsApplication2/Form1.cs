@@ -13,6 +13,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
+//using IBM.Cloud.SDK.Core.Authentication.Iam;
+//using IBM.Cloud.SDK.Core.Http;
+//using IBM.Watson.LanguageTranslator.v3.Model;
 
 
 namespace WindowsFormsApplication2
@@ -20,6 +23,26 @@ namespace WindowsFormsApplication2
 
     public partial class Form1 : Form
     {
+        //public interface IAuthenticatorConfig
+        //{
+        //    string AuthenticationType { get; }
+
+            
+        //}   
+        //public class IamConfig : IAuthenticatorConfig
+        //{
+        //    public IamConfig(string apikey = null, string iamUrl = null, string userManagedAccessToken = null, bool? disableSslVerification = null, string iamClientId = null, string iamClientSecret = null) { }
+
+        //    public string Apikey { get; }
+        //    public string IamUrl { get; }
+        //    public string UserManagedAccessToken { get; }
+        //    public bool? DisableSslVerification { get; }
+        //    public string IamClientId { get; }
+        //    public string IamClientSecret { get; }
+        //    public string AuthenticationType { get; }
+
+            
+        //}
         public class Translation
         {
             public int code { get; set; }
@@ -109,7 +132,66 @@ namespace WindowsFormsApplication2
                 }
 
             }
-            else { 
+            else if (comboBox3.SelectedItem.ToString() == "IBM")
+            {
+                string strTranslatedText = null;
+                try
+                {
+                    TranslatorService.LanguageServiceClient client = new TranslatorService.LanguageServiceClient();
+                    client = new TranslatorService.LanguageServiceClient();
+                    strTranslatedText = client.Translate("6CE9C85A41571C050C379F60DA173D286384E0F2", textBox1.Text, "", "fr");
+                    textBox2.Text = strTranslatedText;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+
+                //var client = TranslationClient.Create();
+                //var novaproba = "hello world";
+                //var response = client.TranslateText(novaproba, LanguageCodes.Polish, LanguageCodes.English);
+                //textBox2.Text = response.TranslatedText;
+
+                //IamConfig config = new IamConfig(
+                //apikey: "-WEs_uaKDD-lp4w5ay5d0640VeXrSHbrsu_byN5mo2aO"
+                //);
+
+                //LanguageTranslatorService service = new LanguageTranslatorService(versionDate, config);
+                //service.SetEndpoint(url);
+
+                //var result = service.Translate(
+                //    text: new List<string>() { "I'm sorry, Dave. I'm afraid I can't do that." },
+                //    modelId: "en-fr"
+                //    );
+
+                //using (var wb = new WebClient())
+                //{
+                //    var reqData = new NameValueCollection();
+                //    reqData["text"] = tekst; // text to translate
+                //    reqData["lang"] = "en-es"; // target language
+                //    reqData["key"] = "-WEs_uaKDD-lp4w5ay5d0640VeXrSHbrsu_byN5mo2aO";
+
+                //    try
+                //    {
+                //        var response = wb.UploadValues("https://gateway-lon.watsonplatform.net/language-translator/api", "POST", reqData);
+                //        string responseInString = Encoding.UTF8.GetString(response);
+
+                //        var rootObject = JsonConvert.DeserializeObject<Translation>(responseInString);
+                //        textBox2.Text = rootObject.text[0];
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        textBox2.Text = ex.Message;
+                //        throw;
+                //    }
+
+                //}
+            }
+
+
+
+            else{ 
 
             tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
             tekst = tekst.Replace(" ", "+");
