@@ -22,7 +22,7 @@ namespace WindowsFormsApplication2
 
     public partial class Form1 : Form
     {
-
+        
         public class Translation
         {
             public int code { get; set; }
@@ -36,6 +36,7 @@ namespace WindowsFormsApplication2
         string tekst;
         public Form1()
         {
+           
             InitializeComponent();
         }
         private void button1_Click(object sender, EventArgs e)
@@ -350,11 +351,16 @@ namespace WindowsFormsApplication2
             //}
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        public void Button2_Click(object sender, EventArgs e)
         {
-            Form2 f2 = new Form2(); // Instantiate a Form3 object.
+            Form2 f2 = new Form2(this); // Instantiate a Form3 object.
             f2.Show(); // Show Form3 and
-            
+            button2.Click -= Button2_Click;
+
+        }
+        public void aktivacija(object sender, EventArgs e) {
+            button2.Click += Button2_Click;
         }
     }
+
 }

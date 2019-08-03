@@ -12,9 +12,12 @@ namespace WindowsFormsApplication2
 {
     public partial class Form2 : Form
     {
-        public Form2()
+        Form1 f1;
+        public Form2(Form1 f)
         {
             InitializeComponent();
+            f1 = f;
+
         }
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -24,8 +27,16 @@ namespace WindowsFormsApplication2
 
         private void Button1_Click(object sender, EventArgs e)
         {
+
+            f1.button2.Click += f1.Button2_Click; 
             this.Close();
-           
+            
+
+        }
+        
+            private void Form2_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

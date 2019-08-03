@@ -163,7 +163,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(325, 327);
+            this.button2.Location = new System.Drawing.Point(316, 74);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(173, 23);
             this.button2.TabIndex = 13;
@@ -211,7 +211,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button2;
+        public System.Windows.Forms.Button button2;
     }
 }
 
