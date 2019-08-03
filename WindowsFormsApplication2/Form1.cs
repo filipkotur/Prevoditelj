@@ -13,42 +13,26 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
-//using IBM.Cloud.SDK.Core.Authentication.Iam;
-//using IBM.Cloud.SDK.Core.Http;
-//using IBM.Watson.LanguageTranslator.v3.Model;
-
+using RestSharp;
+using RestSharp.Serialization.Json;
+using Google.Apis.Util;
 
 namespace WindowsFormsApplication2
 {   
 
     public partial class Form1 : Form
     {
-        //public interface IAuthenticatorConfig
-        //{
-        //    string AuthenticationType { get; }
 
-            
-        //}   
-        //public class IamConfig : IAuthenticatorConfig
-        //{
-        //    public IamConfig(string apikey = null, string iamUrl = null, string userManagedAccessToken = null, bool? disableSslVerification = null, string iamClientId = null, string iamClientSecret = null) { }
-
-        //    public string Apikey { get; }
-        //    public string IamUrl { get; }
-        //    public string UserManagedAccessToken { get; }
-        //    public bool? DisableSslVerification { get; }
-        //    public string IamClientId { get; }
-        //    public string IamClientSecret { get; }
-        //    public string AuthenticationType { get; }
-
-            
-        //}
         public class Translation
         {
             public int code { get; set; }
             public string lang { get; set; }
             public List<string> text { get; set; }
+            public string TranslatedText { get; set; }
+            public string DetectedSourceLanguage { get; set; }
         }
+
+
         string tekst;
         public Form1()
         {
@@ -61,58 +45,99 @@ namespace WindowsFormsApplication2
             string link;
             string link1;
             string result = "";
+            tekst = textBox1.Text;
             switch (comboBox1.SelectedItem.ToString().Trim())
             {
                 case "engleski":
-                    originalni = "english";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        originalni = "english";
+                    else
+                        originalni = "en";
                     break;
                 case "talijanski":
-                    originalni = "italian";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        originalni = "italian";
+                    else
+                        originalni = "it";
                     break;
                 case "francuski":
-                    originalni = "french";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        originalni = "french";
+                    else
+                        originalni = "fr";
                     break;
                 case "njemački":
-                    originalni = "german";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        originalni = "german";
+                    else
+                        originalni = "de";
                     break;
                 case "španjolski":
-                    originalni = "spanish";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        originalni = "spanish";
+                    else
+                        originalni = "es";
                     break;
                 case "poljski":
-                    originalni = "polish";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        originalni = "polish";
+                    else
+                        originalni = "pl";
                     break;
             }
             switch (comboBox2.SelectedItem.ToString().Trim())
             {
                 case "engleski":
-                    prevedeni = "english";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        prevedeni = "english";
+                    else
+                        prevedeni = "en";
                     break;
                 case "talijanski":
-                    prevedeni = "italian";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        prevedeni = "italian";
+                    else
+                        prevedeni = "it";
                     break;
                 case "francuski":
-                    prevedeni = "french";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        prevedeni = "french";
+                    else
+                        prevedeni = "fr";
                     break;
                 case "njemački":
-                    prevedeni = "german";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        prevedeni = "german";
+                    else
+                        prevedeni = "de";
                     break;
                 case "španjolski":
-                    prevedeni = "spanish";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        prevedeni = "spanish";
+                    else
+                        prevedeni = "es";
                     break;
                 case "poljski":
-                    prevedeni = "polish";
+                    if (comboBox3.SelectedItem.ToString() == "Reverso Context")
+                        prevedeni = "polish";
+                    else
+                        prevedeni = "pl";
                     break;
 
             }
-            tekst = textBox1.Text;
-            if (comboBox3.SelectedItem.ToString() == "Yandex")
+            if (comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString())
             {
-
+                tekst = textBox1.Text;
+                textBox2.Text = tekst;
+            }
+            else if(comboBox3.SelectedItem.ToString() == "Yandex")
+            {
+               
                 using (var wb = new WebClient())
                 {
                     var reqData = new NameValueCollection();
                     reqData["text"] = tekst; // text to translate
-                    reqData["lang"] = "tr"; // target language
+                    reqData["lang"] = prevedeni; // target language
                     reqData["key"] = "trnsl.1.1.20190727T115039Z.2a06d4a1411c87fc.399cbc233d5bdbba636feba9f4975b23ff145a9d";
 
                     try
@@ -132,14 +157,16 @@ namespace WindowsFormsApplication2
                 }
 
             }
-            else if (comboBox3.SelectedItem.ToString() == "IBM")
+            else if (comboBox3.SelectedItem.ToString() == "Bing")
             {
                 string strTranslatedText = null;
+                
+                prevedeni = prevedeni.Remove(prevedeni.Length - (prevedeni.Length - 2));
                 try
                 {
                     TranslatorService.LanguageServiceClient client = new TranslatorService.LanguageServiceClient();
                     client = new TranslatorService.LanguageServiceClient();
-                    strTranslatedText = client.Translate("6CE9C85A41571C050C379F60DA173D286384E0F2", textBox1.Text, "", "fr");
+                    strTranslatedText = client.Translate("6CE9C85A41571C050C379F60DA173D286384E0F2", textBox1.Text, "", prevedeni);
                     textBox2.Text = strTranslatedText;
                 }
                 catch (Exception ex)
@@ -148,48 +175,40 @@ namespace WindowsFormsApplication2
                 }
 
 
-                //var client = TranslationClient.Create();
-                //var novaproba = "hello world";
-                //var response = client.TranslateText(novaproba, LanguageCodes.Polish, LanguageCodes.English);
-                //textBox2.Text = response.TranslatedText;
-
-                //IamConfig config = new IamConfig(
-                //apikey: "-WEs_uaKDD-lp4w5ay5d0640VeXrSHbrsu_byN5mo2aO"
-                //);
-
-                //LanguageTranslatorService service = new LanguageTranslatorService(versionDate, config);
-                //service.SetEndpoint(url);
-
-                //var result = service.Translate(
-                //    text: new List<string>() { "I'm sorry, Dave. I'm afraid I can't do that." },
-                //    modelId: "en-fr"
-                //    );
-
-                //using (var wb = new WebClient())
-                //{
-                //    var reqData = new NameValueCollection();
-                //    reqData["text"] = tekst; // text to translate
-                //    reqData["lang"] = "en-es"; // target language
-                //    reqData["key"] = "-WEs_uaKDD-lp4w5ay5d0640VeXrSHbrsu_byN5mo2aO";
-
-                //    try
-                //    {
-                //        var response = wb.UploadValues("https://gateway-lon.watsonplatform.net/language-translator/api", "POST", reqData);
-                //        string responseInString = Encoding.UTF8.GetString(response);
-
-                //        var rootObject = JsonConvert.DeserializeObject<Translation>(responseInString);
-                //        textBox2.Text = rootObject.text[0];
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        textBox2.Text = ex.Message;
-                //        throw;
-                //    }
-
-                //}
+                
             }
 
-
+            else if (comboBox3.SelectedItem.ToString() == "MyMemory")
+            {
+                
+                tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
+                tekst = tekst.Replace(" ", "%20");
+                if (tekst.Length == tekst.LastIndexOf("%20")) { tekst.Remove(tekst.Length - 1); }
+                if (tekst.IndexOf("%20") == 0) { tekst = tekst.Substring(1); }
+                link1 = tekst;
+                int n = 0; int i = 0; int kon = 0;
+                for (i = 1; i < 10; i++)
+                {
+                    kon = link1.IndexOf("%20");
+                    link1 = link1.Substring(kon + 1);
+                    n = n + kon + 1;
+                }
+                link = "https://api.mymemory.translated.net/get?q=" + tekst + "&langpair=" + originalni + "|" + prevedeni;
+                WebClient client = new WebClient();
+                var link2 = client.DownloadData(link);
+                link1 = Encoding.UTF8.GetString(link2);
+                File.WriteAllText(@"C: \Users\filip\Desktop\proba\localfile.txt", link1);
+                File.WriteAllText("localfile.txt", link1);
+                int rezanje = link1.IndexOf("ext");
+                link1 = link1.Substring(rezanje);
+                 rezanje = link1.IndexOf(":");
+                link1 = link1.Substring(rezanje);
+                link1 = link1.Substring(2);
+                int zadnji = link1.IndexOf("match") - 4;
+                result = link1.Substring(1, zadnji);
+                result = String.Join(" ", result.Split(' ').Reverse());
+                textBox2.Text = result;
+            }
 
             else{ 
 
@@ -271,28 +290,28 @@ namespace WindowsFormsApplication2
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.Items.Contains("engleski")) { }
-            else 
-            {
-                comboBox1.Items.Add("engleski");
-            }
-            if (comboBox1.SelectedItem.ToString() == "engleski" && comboBox2.SelectedItem.ToString() == "engleski")
-            {
-                comboBox2.SelectedIndex = 0; comboBox2.Items.Remove("engleski");
-            }
-            else if (comboBox1.SelectedItem.ToString() == "engleski")
-            {
-                comboBox2.Items.Remove("engleski");
-            }
-            else if (comboBox1.SelectedItem.ToString() != "engleski" )
-            {
-                if (comboBox2.Items.Contains("engleski")) { }
-                else
-                {
-                    comboBox2.Items.Add("engleski");
-                }
-                comboBox2.SelectedIndex = 5;
-            }
+            //if (comboBox1.Items.Contains("engleski")) { }
+            //else 
+            //{
+            //    comboBox1.Items.Add("engleski");
+            //}
+            //if (comboBox1.SelectedItem.ToString() == "engleski" && comboBox2.SelectedItem.ToString() == "engleski")
+            //{
+            //    comboBox2.SelectedIndex = 0; comboBox2.Items.Remove("engleski");
+            //}
+            //else if (comboBox1.SelectedItem.ToString() == "engleski")
+            //{
+            //    comboBox2.Items.Remove("engleski");
+            //}
+            //else if (comboBox1.SelectedItem.ToString() != "engleski" )
+            //{
+            //    if (comboBox2.Items.Contains("engleski")) { }
+            //    else
+            //    {
+            //        comboBox2.Items.Add("engleski");
+            //    }
+            //    comboBox2.SelectedIndex = 5;
+            //}
 
 
         }
@@ -301,33 +320,41 @@ namespace WindowsFormsApplication2
         {
             comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 5;
+            comboBox3.SelectedIndex = 0;
 
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         { 
-            if (comboBox2.Items.Contains("engleski")){ }
-            else
-            {
-                comboBox2.Items.Add("engleski");
-            }
-            if ((comboBox2.SelectedItem.ToString() == "engleski" && comboBox1.SelectedItem.ToString() == "engleski") || (comboBox2.SelectedItem.ToString() == "engleski" && comboBox1.SelectedItem.ToString() != "engleski"))
-            {
-                comboBox1.SelectedIndex = 0; comboBox1.Items.Remove("engleski");
-            }
-            if (comboBox2.SelectedItem.ToString()== "engleski")
-            {
-                comboBox1.Items.Remove("engleski");
-            }
-            else if (comboBox2.SelectedItem.ToString() != "engleski")
-            {   
-                if (comboBox1.Items.Contains("engleski")) { }
-                else
-                {
-                    comboBox1.Items.Add("engleski");
-                }
-                comboBox1.SelectedIndex = 5;
-            }
+            //if (comboBox2.Items.Contains("engleski")){ }
+            //else
+            //{
+            //    comboBox2.Items.Add("engleski");
+            //}
+            //if ((comboBox2.SelectedItem.ToString() == "engleski" && comboBox1.SelectedItem.ToString() == "engleski") || (comboBox2.SelectedItem.ToString() == "engleski" && comboBox1.SelectedItem.ToString() != "engleski"))
+            //{
+            //    comboBox1.SelectedIndex = 0; comboBox1.Items.Remove("engleski");
+            //}
+            //if (comboBox2.SelectedItem.ToString()== "engleski")
+            //{
+            //    comboBox1.Items.Remove("engleski");
+            //}
+            //else if (comboBox2.SelectedItem.ToString() != "engleski")
+            //{   
+            //    if (comboBox1.Items.Contains("engleski")) { }
+            //    else
+            //    {
+            //        comboBox1.Items.Add("engleski");
+            //    }
+            //    comboBox1.SelectedIndex = 5;
+            //}
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            Form2 f2 = new Form2(); // Instantiate a Form3 object.
+            f2.Show(); // Show Form3 and
+            
         }
     }
 }
