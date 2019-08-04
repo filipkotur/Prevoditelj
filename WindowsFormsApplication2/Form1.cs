@@ -45,7 +45,7 @@ namespace WindowsFormsApplication2
             string prevedeni = "";
             string link;
             string link1;
-            string result = "";
+            string result = null;
             tekst = textBox1.Text;
             switch (comboBox1.SelectedItem.ToString().Trim())
             {
@@ -162,7 +162,7 @@ namespace WindowsFormsApplication2
             {
                 string strTranslatedText = null;
                 
-                prevedeni = prevedeni.Remove(prevedeni.Length - (prevedeni.Length - 2));
+                
                 try
                 {
                     TranslatorService.LanguageServiceClient client = new TranslatorService.LanguageServiceClient();
@@ -234,24 +234,43 @@ namespace WindowsFormsApplication2
             string rezac = "\">";
             string rezac2 = "search\">";
             i = 0; n = 2;
-            if (originalni == "english")
+            if (link1.IndexOf("Adverb") != -1)
+                {
+                    i = 1;
+                    int rezanje = link1.IndexOf("class=\"wide-container\">");
+                    link1 = link1.Substring(rezanje);
+                    rezanje = link1.IndexOf("class='translation'");
+                    link1 = link1.Substring(rezanje);
+                    rezanje = link1.IndexOf("on'");
+                    link1 = link1.Substring(rezanje);
+                    int prvi = link1.IndexOf(">") + i;
+                    int zadnji = link1.IndexOf("<");
+                    result = link1.Substring(prvi, zadnji - prvi);
+                }
+                   
+            else if ((originalni == "english" || link1.IndexOf("split wide-container") != -1) && prevedeni !="english" )
             {
                 rezac2 = "lang"; i = 6; rezac = "="; n = 0;
             }
-            if (link1.IndexOf("split wide-container") != -1)
+            if (link1.IndexOf("split wide-container") != -1 && result==null)
             {
                 while (link1.IndexOf("split wide-container") != -1)
                 {
                     int rezanje = link1.IndexOf("split wide-container");
                     link1 = link1.Substring(rezanje);
                     rezanje = link1.IndexOf(rezac2);
-                    link1 = link1.Substring(rezanje);
+                    link1 = link1.Substring(rezanje +2);
+                    if(originalni != "english")
+                    {
+                            rezanje = link1.IndexOf(rezac2);
+                            link1 = link1.Substring(rezanje);
+                    }
                     int prvi = link1.IndexOf(rezac) + i;
                     int zadnji = link1.IndexOf("</a>");
                     result = result + " " + link1.Substring(prvi + n, zadnji - prvi - n);
                 }
             }
-            else if (link1.IndexOf("title=\"Other\">") != -1)
+            else if (link1.IndexOf("title=\"Other\">") != -1 && result == null)
             {
                 rezac = "</div>\">";
                 i = 7;
@@ -268,7 +287,7 @@ namespace WindowsFormsApplication2
                     while (result.IndexOf(" ") == 0) { result = result.Substring(1); }
                 }
             }
-            else //(link1.IndexOf("class=\"wide-container\">") != -1)
+            else if(result == null)
             {
                 i = 1;
                 int rezanje = link1.IndexOf("class=\"wide-container\">");
@@ -358,8 +377,27 @@ namespace WindowsFormsApplication2
             button2.Click -= Button2_Click;
 
         }
-        public void aktivacija(object sender, EventArgs e) {
-            button2.Click += Button2_Click;
+        
+        private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            
+            int broj_znakova = textBox1.Text.Length;//yandex 1`000`000 caracters
+            string myString = broj_znakova.ToString();//bing 5000 2`000`000 per hour
+            string mymemory = textBox1.Text;
+            Encoding u8 = Encoding.UTF8;
+            int iBC = u8.GetByteCount(mymemory);
+            if (comboBox3.SelectedItem.ToString() == "Yandex")//
+                label6.Text = myString + "/32767 karaktera";
+            else if (comboBox3.SelectedItem.ToString() == "Bing")
+            {
+                textBox1.MaxLength = 500;
+                label6.Text = myString + "/5000 karaktera";
+            }
+            else if (comboBox3.SelectedItem.ToString() == "MyMemory")//
+                label6.Text = iBC + "/500 bytes"; 
+
+            else if (comboBox3.SelectedItem.ToString() == "Reverso Context")//
+                label6.Text = myString + "/32767 karaktera";
         }
     }
 
