@@ -16,6 +16,7 @@ using System.Collections.Specialized;
 using RestSharp;
 using RestSharp.Serialization.Json;
 using Google.Apis.Util;
+using System.Globalization;
 
 namespace WindowsFormsApplication2
 {   
@@ -126,14 +127,15 @@ namespace WindowsFormsApplication2
                     break;
 
             }
-            if (comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString())
+            tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
+            if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst ==  null || string.IsNullOrWhiteSpace(tekst))
             {
                 tekst = textBox1.Text;
                 textBox2.Text = tekst;
             }
             else if(comboBox3.SelectedItem.ToString() == "Yandex")
             {
-               
+                
                 using (var wb = new WebClient())
                 {
                     var reqData = new NameValueCollection();
@@ -161,13 +163,11 @@ namespace WindowsFormsApplication2
             else if (comboBox3.SelectedItem.ToString() == "Bing")
             {
                 string strTranslatedText = null;
-                
-                
                 try
                 {
                     TranslatorService.LanguageServiceClient client = new TranslatorService.LanguageServiceClient();
                     client = new TranslatorService.LanguageServiceClient();
-                    strTranslatedText = client.Translate("6CE9C85A41571C050C379F60DA173D286384E0F2", textBox1.Text, "", prevedeni);
+                    strTranslatedText = client.Translate("6CE9C85A41571C050C379F60DA173D286384E0F2", tekst, "", prevedeni);
                     textBox2.Text = strTranslatedText;
                 }
                 catch (Exception ex)
@@ -180,9 +180,7 @@ namespace WindowsFormsApplication2
             }
 
             else if (comboBox3.SelectedItem.ToString() == "MyMemory")
-            {
-                
-                tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
+            {            
                 tekst = tekst.Replace(" ", "%20");
                 if (tekst.Length == tekst.LastIndexOf("%20")) { tekst.Remove(tekst.Length - 1); }
                 if (tekst.IndexOf("%20") == 0) { tekst = tekst.Substring(1); }
@@ -196,6 +194,7 @@ namespace WindowsFormsApplication2
                 }
                 link = "https://api.mymemory.translated.net/get?q=" + tekst + "&langpair=" + originalni + "|" + prevedeni;
                 WebClient client = new WebClient();
+                 //link1 = client.DownloadString(link);
                 var link2 = client.DownloadData(link);
                 link1 = Encoding.UTF8.GetString(link2);
                 File.WriteAllText(@"C: \Users\filip\Desktop\proba\localfile.txt", link1);
@@ -204,16 +203,31 @@ namespace WindowsFormsApplication2
                 link1 = link1.Substring(rezanje);
                  rezanje = link1.IndexOf(":");
                 link1 = link1.Substring(rezanje);
-                link1 = link1.Substring(2);
+                link1 = link1.Substring(1);
                 int zadnji = link1.IndexOf("match") - 4;
                 result = link1.Substring(1, zadnji);
                 result = String.Join(" ", result.Split(' ').Reverse());
+                if (result.IndexOf("\\u") != -1)
+                {
+                    link = result;
+                    while (link.IndexOf("\\u") != -1)
+                    {
+                        zadnji = link.IndexOf("\\u");
+                        link = link.Substring(zadnji);
+
+                        link1 = link.Substring(0, 6);
+                       
+                        link = link.Substring(6);
+                        string stari = link1;
+                        link1 = Regex.Replace(link1, @"\\u(?<Value>[a-zA-Z0-9]{4})",m =>{
+                    return ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString();});
+                        result = result.Replace(stari, link1);
+                    }
+                }
                 textBox2.Text = result;
             }
 
             else{ 
-
-            tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
             tekst = tekst.Replace(" ", "+");
             if (tekst.Length == tekst.LastIndexOf("+")) { tekst.Remove(tekst.Length - 1); }
             if (tekst.IndexOf("+") == 0) { tekst = tekst.Substring(1); }
@@ -310,30 +324,7 @@ namespace WindowsFormsApplication2
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (comboBox1.Items.Contains("engleski")) { }
-            //else 
-            //{
-            //    comboBox1.Items.Add("engleski");
-            //}
-            //if (comboBox1.SelectedItem.ToString() == "engleski" && comboBox2.SelectedItem.ToString() == "engleski")
-            //{
-            //    comboBox2.SelectedIndex = 0; comboBox2.Items.Remove("engleski");
-            //}
-            //else if (comboBox1.SelectedItem.ToString() == "engleski")
-            //{
-            //    comboBox2.Items.Remove("engleski");
-            //}
-            //else if (comboBox1.SelectedItem.ToString() != "engleski" )
-            //{
-            //    if (comboBox2.Items.Contains("engleski")) { }
-            //    else
-            //    {
-            //        comboBox2.Items.Add("engleski");
-            //    }
-            //    comboBox2.SelectedIndex = 5;
-            //}
-
-
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -346,58 +337,104 @@ namespace WindowsFormsApplication2
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         { 
-            //if (comboBox2.Items.Contains("engleski")){ }
-            //else
-            //{
-            //    comboBox2.Items.Add("engleski");
-            //}
-            //if ((comboBox2.SelectedItem.ToString() == "engleski" && comboBox1.SelectedItem.ToString() == "engleski") || (comboBox2.SelectedItem.ToString() == "engleski" && comboBox1.SelectedItem.ToString() != "engleski"))
-            //{
-            //    comboBox1.SelectedIndex = 0; comboBox1.Items.Remove("engleski");
-            //}
-            //if (comboBox2.SelectedItem.ToString()== "engleski")
-            //{
-            //    comboBox1.Items.Remove("engleski");
-            //}
-            //else if (comboBox2.SelectedItem.ToString() != "engleski")
-            //{   
-            //    if (comboBox1.Items.Contains("engleski")) { }
-            //    else
-            //    {
-            //        comboBox1.Items.Add("engleski");
-            //    }
-            //    comboBox1.SelectedIndex = 5;
-            //}
+            
         }
 
         public void Button2_Click(object sender, EventArgs e)
         {
-            Form2 f2 = new Form2(this); // Instantiate a Form3 object.
+            Form2 f2 = new Form2(this); 
             f2.Show(); // Show Form3 and
             button2.Click -= Button2_Click;
 
         }
-        
+
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            
+
             int broj_znakova = textBox1.Text.Length;//yandex 1`000`000 caracters
             string myString = broj_znakova.ToString();//bing 5000 2`000`000 per hour
             string mymemory = textBox1.Text;
             Encoding u8 = Encoding.UTF8;
             int iBC = u8.GetByteCount(mymemory);
             if (comboBox3.SelectedItem.ToString() == "Yandex")//
+            {
+                var textBytes = Encoding.UTF8.GetBytes(textBox1.Text);
+                var textByteCount = Encoding.UTF8.GetByteCount(textBox1.Text);
+                var textCharCount = Encoding.UTF8.GetCharCount(textBytes);
+
+                if (textCharCount != textByteCount && textByteCount >= 500)
+                {
+                    textBox1.Text = Encoding.UTF32.GetString(Encoding.UTF32.GetBytes(textBox1.Text), 0, 500);
+                }
+                else if (textBox1.Text.Length >= 240)
+                {
+                    textBox1.Text = textBox1.Text.Substring(0, 240);
+                }
+                textBox1.MaxLength = 240;
                 label6.Text = myString + "/32767 karaktera";
+            }
             else if (comboBox3.SelectedItem.ToString() == "Bing")
             {
-                textBox1.MaxLength = 500;
+                var textBytes = Encoding.UTF8.GetBytes(textBox1.Text);
+                var textByteCount = Encoding.UTF8.GetByteCount(textBox1.Text);
+                var textCharCount = Encoding.UTF8.GetCharCount(textBytes);
+
+                if (textCharCount != textByteCount && textByteCount >= 500)
+                {
+                    textBox1.Text = Encoding.UTF32.GetString(Encoding.UTF32.GetBytes(textBox1.Text), 0, 500);
+                }
+                else if (textBox1.Text.Length >= 240)
+                {
+                    textBox1.Text = textBox1.Text.Substring(0, 240);
+                }
+                textBox1.MaxLength = 240;
                 label6.Text = myString + "/5000 karaktera";
             }
             else if (comboBox3.SelectedItem.ToString() == "MyMemory")//
-                label6.Text = iBC + "/500 bytes"; 
+            {
+                var textBytes = Encoding.UTF8.GetBytes(textBox1.Text);
+                var textByteCount = Encoding.UTF8.GetByteCount(textBox1.Text);
+                var textCharCount = Encoding.UTF8.GetCharCount(textBytes);
+
+                if (textCharCount != textByteCount && textByteCount >= 500)
+                {
+                    textBox1.Text = Encoding.UTF32.GetString(Encoding.UTF32.GetBytes(textBox1.Text), 0, 500);
+                }
+                else if (textBox1.Text.Length >= 240)
+                {
+                    textBox1.Text = textBox1.Text.Substring(0, 240);
+                }
+                label6.Text = iBC + "/500 bytes";
+            }
 
             else if (comboBox3.SelectedItem.ToString() == "Reverso Context")//
+            {
+                var textBytes = Encoding.UTF8.GetBytes(textBox1.Text);
+                var textByteCount = Encoding.UTF8.GetByteCount(textBox1.Text);
+                var textCharCount = Encoding.UTF8.GetCharCount(textBytes);
+
+                if (textCharCount != textByteCount && textByteCount >= 500)
+                {
+                    textBox1.Text = Encoding.UTF32.GetString(Encoding.UTF32.GetBytes(textBox1.Text), 0, 500);
+                }
+                else if (textBox1.Text.Length >= 240)
+                {
+                    textBox1.Text = textBox1.Text.Substring(0, 240);
+                }
+                textBox1.MaxLength = 240;
                 label6.Text = myString + "/32767 karaktera";
+            }
+        }
+        private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox3.SelectedItem.ToString() == "Yandex" || comboBox3.SelectedItem.ToString() == "Bing")
+            {
+                comboBox1.Enabled = false;
+            }
+            else
+            {
+                comboBox1.Enabled = true;
+            }
         }
     }
 
