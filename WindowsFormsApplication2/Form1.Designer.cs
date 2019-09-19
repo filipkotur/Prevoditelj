@@ -57,12 +57,12 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
+            "engleski",
             "talijanski",
-            "njemački",
-            "francuski",
-            "španjolski",
             "poljski",
-            "engleski"});
+            "španjolski",
+            "francuski",
+            "njemački"});
             this.comboBox1.Location = new System.Drawing.Point(72, 74);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
@@ -82,12 +82,12 @@
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
+            "francuski",
             "talijanski",
             "njemački",
-            "francuski",
-            "španjolski",
             "poljski",
-            "engleski"});
+            "engleski",
+            "španjolski"});
             this.comboBox2.Location = new System.Drawing.Point(599, 74);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);

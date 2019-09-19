@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WindowsFormsApplication2.Properties {
+namespace WindowsFormsApplication2 {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace WindowsFormsApplication2.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    public class strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal strings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WindowsFormsApplication2.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindowsFormsApplication2.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindowsFormsApplication2.strings", typeof(strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,60 @@ namespace WindowsFormsApplication2.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to engleski.
+        /// </summary>
+        public static string ENG {
+            get {
+                return ResourceManager.GetString("ENG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to francuski.
+        /// </summary>
+        public static string FRA {
+            get {
+                return ResourceManager.GetString("FRA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to talijanski.
+        /// </summary>
+        public static string IT {
+            get {
+                return ResourceManager.GetString("IT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to njemački.
+        /// </summary>
+        public static string NJEM {
+            get {
+                return ResourceManager.GetString("NJEM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to poljski.
+        /// </summary>
+        public static string POLJ {
+            get {
+                return ResourceManager.GetString("POLJ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to španjolski.
+        /// </summary>
+        public static string SPA {
+            get {
+                return ResourceManager.GetString("SPA", resourceCulture);
             }
         }
     }

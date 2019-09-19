@@ -17,9 +17,14 @@ using RestSharp;
 using RestSharp.Serialization.Json;
 using Google.Apis.Util;
 using System.Globalization;
+using System.Resources;
+using System.Threading;
+using System.Collections;
 
 namespace WindowsFormsApplication2
 {   
+    //internal class MyResources
+    //{ }
 
     public partial class Form1 : Form
     {
@@ -33,8 +38,8 @@ namespace WindowsFormsApplication2
             public string DetectedSourceLanguage { get; set; }
         }
 
-
-        string tekst;
+        
+        public string tekst;
         public Form1()
         {
            
@@ -44,9 +49,6 @@ namespace WindowsFormsApplication2
         {
             string originalni = "";
             string prevedeni = "";
-            string link;
-            string link1;
-            string result = null;
             tekst = textBox1.Text;
             switch (comboBox1.SelectedItem.ToString().Trim())
             {
@@ -128,6 +130,7 @@ namespace WindowsFormsApplication2
 
             }
             tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
+            Bazni_server prijevod = null;
             if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst ==  null || string.IsNullOrWhiteSpace(tekst))
             {
                 tekst = textBox1.Text;
@@ -135,191 +138,27 @@ namespace WindowsFormsApplication2
             }
             else if(comboBox3.SelectedItem.ToString() == "Yandex")
             {
-                
-                using (var wb = new WebClient())
-                {
-                    var reqData = new NameValueCollection();
-                    reqData["text"] = tekst; // text to translate
-                    reqData["lang"] = prevedeni; // target language
-                    reqData["key"] = "trnsl.1.1.20190727T115039Z.2a06d4a1411c87fc.399cbc233d5bdbba636feba9f4975b23ff145a9d";
-
-                    try
-                    {
-                        var response = wb.UploadValues("https://translate.yandex.net/api/v1.5/tr.json/translate", "POST", reqData);
-                        string responseInString = Encoding.UTF8.GetString(response);
-
-                        var rootObject = JsonConvert.DeserializeObject<Translation>(responseInString);
-                        textBox2.Text = rootObject.text[0]; 
-                    }
-                    catch (Exception ex)
-                    {
-                        textBox2.Text= ex.Message;
-                        throw;
-                    }
-
-                }
-
+                prijevod = new Yandex();
+                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst,prevedeni);               
             }
             else if (comboBox3.SelectedItem.ToString() == "Bing")
             {
-                string strTranslatedText = null;
-                try
-                {
-                    TranslatorService.LanguageServiceClient client = new TranslatorService.LanguageServiceClient();
-                    client = new TranslatorService.LanguageServiceClient();
-                    strTranslatedText = client.Translate("6CE9C85A41571C050C379F60DA173D286384E0F2", tekst, "", prevedeni);
-                    textBox2.Text = strTranslatedText;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-
-                
+                prijevod = new Bing();
+                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
             }
 
             else if (comboBox3.SelectedItem.ToString() == "MyMemory")
-            {            
-                tekst = tekst.Replace(" ", "%20");
-                if (tekst.Length == tekst.LastIndexOf("%20")) { tekst.Remove(tekst.Length - 1); }
-                if (tekst.IndexOf("%20") == 0) { tekst = tekst.Substring(1); }
-                link1 = tekst;
-                int n = 0; int i = 0; int kon = 0;
-                for (i = 1; i < 10; i++)
-                {
-                    kon = link1.IndexOf("%20");
-                    link1 = link1.Substring(kon + 1);
-                    n = n + kon + 1;
-                }
-                link = "https://api.mymemory.translated.net/get?q=" + tekst + "&langpair=" + originalni + "|" + prevedeni;
-                WebClient client = new WebClient();
-                 //link1 = client.DownloadString(link);
-                var link2 = client.DownloadData(link);
-                link1 = Encoding.UTF8.GetString(link2);
-                File.WriteAllText(@"C: \Users\filip\Desktop\proba\localfile.txt", link1);
-                File.WriteAllText("localfile.txt", link1);
-                int rezanje = link1.IndexOf("ext");
-                link1 = link1.Substring(rezanje);
-                 rezanje = link1.IndexOf(":");
-                link1 = link1.Substring(rezanje);
-                link1 = link1.Substring(1);
-                int zadnji = link1.IndexOf("match") - 4;
-                result = link1.Substring(1, zadnji);
-                result = String.Join(" ", result.Split(' ').Reverse());
-                if (result.IndexOf("\\u") != -1)
-                {
-                    link = result;
-                    while (link.IndexOf("\\u") != -1)
-                    {
-                        zadnji = link.IndexOf("\\u");
-                        link = link.Substring(zadnji);
-
-                        link1 = link.Substring(0, 6);
-                       
-                        link = link.Substring(6);
-                        string stari = link1;
-                        link1 = Regex.Replace(link1, @"\\u(?<Value>[a-zA-Z0-9]{4})",m =>{
-                    return ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString();});
-                        result = result.Replace(stari, link1);
-                    }
-                }
-                textBox2.Text = result;
-            }
-
-            else{ 
-            tekst = tekst.Replace(" ", "+");
-            if (tekst.Length == tekst.LastIndexOf("+")) { tekst.Remove(tekst.Length - 1); }
-            if (tekst.IndexOf("+") == 0) { tekst = tekst.Substring(1); }
-            link1 = tekst;
-            int n = 0; int i = 0; int kon = 0;
-            for (i = 1; i < 10; i++)
             {
-                kon = link1.IndexOf("+");
-                link1 = link1.Substring(kon + 1);
-                n = n + kon + 1;
+                prijevod = new MyMemory(originalni);
+                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
             }
-            link = "http://context.reverso.net/translation/" + originalni + "-" + prevedeni + "/" + tekst;
-            WebClient client = new WebClient();
-            var link2 = client.DownloadData(link);
-            link1 = Encoding.UTF8.GetString(link2);
-            File.WriteAllText(@"C: \Users\filip\Desktop\proba\localfile.txt", link1);
-            File.WriteAllText("localfile.txt", link1);
-            string rezac = "\">";
-            string rezac2 = "search\">";
-            i = 0; n = 2;
-            if (link1.IndexOf("Adverb") != -1)
-                {
-                    i = 1;
-                    int rezanje = link1.IndexOf("class=\"wide-container\">");
-                    link1 = link1.Substring(rezanje);
-                    rezanje = link1.IndexOf("class='translation'");
-                    link1 = link1.Substring(rezanje);
-                    rezanje = link1.IndexOf("on'");
-                    link1 = link1.Substring(rezanje);
-                    int prvi = link1.IndexOf(">") + i;
-                    int zadnji = link1.IndexOf("<");
-                    result = link1.Substring(prvi, zadnji - prvi);
-                }
-                   
-            else if ((originalni == "english" || link1.IndexOf("split wide-container") != -1) && prevedeni !="english" )
+            else
             {
-                rezac2 = "lang"; i = 6; rezac = "="; n = 0;
+                prijevod = new Context_Reverso(originalni);
+                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
             }
-            if (link1.IndexOf("split wide-container") != -1 && result==null)
-            {
-                while (link1.IndexOf("split wide-container") != -1)
-                {
-                    int rezanje = link1.IndexOf("split wide-container");
-                    link1 = link1.Substring(rezanje);
-                    rezanje = link1.IndexOf(rezac2);
-                    link1 = link1.Substring(rezanje +2);
-                    if(originalni != "english")
-                    {
-                            rezanje = link1.IndexOf(rezac2);
-                            link1 = link1.Substring(rezanje);
-                    }
-                    int prvi = link1.IndexOf(rezac) + i;
-                    int zadnji = link1.IndexOf("</a>");
-                    result = result + " " + link1.Substring(prvi + n, zadnji - prvi - n);
-                }
-            }
-            else if (link1.IndexOf("title=\"Other\">") != -1 && result == null)
-            {
-                rezac = "</div>\">";
-                i = 7;
-                rezac2 = "examples with alignment)";
-                while (link1.IndexOf("title=\"Other\">") != -1)
-                {
-                    int rezanje = link1.IndexOf("title=\"Other\">");
-                    link1 = link1.Substring(rezanje);
-                    rezanje = link1.IndexOf(rezac2);
-                    link1 = link1.Substring(rezanje);
-                    int prvi = link1.IndexOf(rezac) + i;
-                    int zadnji = link1.IndexOf("</a>");
-                    result = result + " " + link1.Substring(prvi + n, zadnji - prvi - n);
-                    while (result.IndexOf(" ") == 0) { result = result.Substring(1); }
-                }
-            }
-            else if(result == null)
-            {
-                i = 1;
-                int rezanje = link1.IndexOf("class=\"wide-container\">");
-                link1 = link1.Substring(rezanje);
-                rezanje = link1.IndexOf("class='translation'");
-                link1 = link1.Substring(rezanje);
-                rezanje = link1.IndexOf("on'");
-                link1 = link1.Substring(rezanje);
-                int prvi = link1.IndexOf(">") + i;
-                int zadnji = link1.IndexOf("<");
-                result = link1.Substring(prvi, zadnji - prvi);
-            }
+            
 
-
-
-
-            textBox2.Text = result;
-        }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -329,9 +168,27 @@ namespace WindowsFormsApplication2
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            //comboBox1.DisplayMember = "Name";
+            //comboBox2.DisplayMember = "Name";
+
+            ////Create the reader for your resx file
+            //ResXResourceReader reader = new ResXResourceReader("C:\\Users\\filip\\source\\repos\\Prevoditelj\\WindowsFormsApplication2\\strings.resx");
+            ////ResourceManager rm = new ResourceManager(typeof(MyResources));
+            ////var prijevod = rm.GetString("ENG");
+            ////Set property to use ResXDataNodes in object ([see MSDN][2])
+            //reader.UseResXDataNodes = true;
+            //IDictionaryEnumerator enumerator = reader.GetEnumerator();
+
+            //while (enumerator.MoveNext())
+            //{   //Fill the combobox with all key/value pairs
+            //    comboBox1.Items.Add(enumerator.Value);
+            //    comboBox2.Items.Add(enumerator.Value);
+            //}
             comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 5;
             comboBox3.SelectedIndex = 0;
+
 
         }
 
@@ -436,6 +293,8 @@ namespace WindowsFormsApplication2
                 comboBox1.Enabled = true;
             }
         }
+
+        
     }
 
 }
