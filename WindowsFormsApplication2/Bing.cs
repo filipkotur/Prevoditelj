@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication2
 {
-    class Bing : Bazni_server
+    class Bing : BazniServer
     {
         public Bing() : base()
         { }

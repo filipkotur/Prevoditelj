@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using static WindowsFormsApplication2.Form1;
 namespace WindowsFormsApplication2
 {
-    abstract class Bazni_server
+    abstract class BazniServer
     {
-        protected Bazni_server(string kraticaOriginalnogJezika)
+        protected BazniServer(string kraticaOriginalnogJezika)
         {
             originalniJezik = kraticaOriginalnogJezika;
         }
-        protected Bazni_server()
+        protected BazniServer()
         {
         }
 

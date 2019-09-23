@@ -7,7 +7,7 @@ using static WindowsFormsApplication2.Form1;
 
 namespace WindowsFormsApplication2
 {
-     class Yandex : Bazni_server
+     class Yandex : BazniServer
     {
         public Yandex() : base()
         { }

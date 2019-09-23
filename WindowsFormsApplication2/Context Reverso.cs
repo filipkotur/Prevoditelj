@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApplication2
 {
-    class Context_Reverso : Bazni_server
+    class Context_Reverso : BazniServer
     {
         public Context_Reverso(string kraticaOriginalnogJezika) : base(kraticaOriginalnogJezika)
         { }
@@ -19,9 +19,11 @@ namespace WindowsFormsApplication2
         public string result;
         public override string SlanjeZahtjeva(string tekstZaPrijevod, string jezik)
         {
-            tekstZaPrijevod = tekstZaPrijevod.Replace(" ", "+");
-            if (tekstZaPrijevod.Length == tekstZaPrijevod.LastIndexOf("+")) { tekstZaPrijevod.Remove(tekstZaPrijevod.Length - 1); }
-            if (tekstZaPrijevod.IndexOf("+") == 0) { tekstZaPrijevod = tekstZaPrijevod.Substring(1); }
+            
+            tekstZaPrijevod = tekstZaPrijevod.Trim();
+            tekstZaPrijevod = tekstZaPrijevod.Replace("+", "");
+            tekstZaPrijevod = Uri.EscapeDataString(tekstZaPrijevod);
+            tekstZaPrijevod = tekstZaPrijevod.Replace("%20", "+");
             link1 = tekstZaPrijevod;
             
             for (i = 1; i < 10; i++)

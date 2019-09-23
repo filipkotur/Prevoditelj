@@ -130,33 +130,26 @@ namespace WindowsFormsApplication2
 
             }
             tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
-            Bazni_server prijevod = null;
+            BazniServer prijevod;
             if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst ==  null || string.IsNullOrWhiteSpace(tekst))
             {
                 tekst = textBox1.Text;
                 textBox2.Text = tekst;
-            }
-            else if(comboBox3.SelectedItem.ToString() == "Yandex")
-            {
-                prijevod = new Yandex();
-                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst,prevedeni);               
-            }
-            else if (comboBox3.SelectedItem.ToString() == "Bing")
-            {
-                prijevod = new Bing();
-                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
-            }
 
-            else if (comboBox3.SelectedItem.ToString() == "MyMemory")
+            }
+            else 
             {
-                prijevod = new MyMemory(originalni);
+                if (comboBox3.SelectedItem.ToString() == "Yandex")
+                    prijevod = new Yandex();
+                else if (comboBox3.SelectedItem.ToString() == "Bing")
+                    prijevod = new Bing();
+                else if (comboBox3.SelectedItem.ToString() == "MyMemory")
+                    prijevod = new MyMemory(originalni);
+                else 
+                    prijevod = new Context_Reverso(originalni);
                 textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
             }
-            else
-            {
-                prijevod = new Context_Reverso(originalni);
-                textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
-            }
+            
             
 
         }

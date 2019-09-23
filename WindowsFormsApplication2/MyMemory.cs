@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApplication2
 {
-    class MyMemory : Bazni_server
+    class MyMemory : BazniServer
     {
         public MyMemory(string kraticaOriginalnogJezika) : base(kraticaOriginalnogJezika)
         { }
@@ -18,9 +18,7 @@ namespace WindowsFormsApplication2
         public string link1;
         public override string SlanjeZahtjeva(string tekstZaPrijevod, string jezik)
         {
-            tekstZaPrijevod = tekstZaPrijevod.Replace(" ", "%20");
-            if (tekstZaPrijevod.Length == tekstZaPrijevod.LastIndexOf("%20")) { tekstZaPrijevod.Remove(tekstZaPrijevod.Length - 1); }
-            if (tekstZaPrijevod.IndexOf("%20") == 0) { tekstZaPrijevod = tekstZaPrijevod.Substring(1); }
+            tekstZaPrijevod = Uri.EscapeDataString(tekstZaPrijevod);
             link1 = tekstZaPrijevod;
             int n = 0; int i = 0; int kon = 0;
             for (i = 1; i < 10; i++)
