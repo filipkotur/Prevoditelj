@@ -221,7 +221,7 @@ namespace WindowsFormsApplication2
                     textBox1.Text = textBox1.Text.Substring(0, 240);
                 }
                 textBox1.MaxLength = 240;
-                label6.Text = myString + "/32767 karaktera";
+                label6.Text = myString + "/500 bytes";
             }
             else if (comboBox3.SelectedItem.ToString() == "Bing")
             {
@@ -238,7 +238,7 @@ namespace WindowsFormsApplication2
                     textBox1.Text = textBox1.Text.Substring(0, 240);
                 }
                 textBox1.MaxLength = 240;
-                label6.Text = myString + "/5000 karaktera";
+                label6.Text = myString + "/500 bytes";
             }
             else if (comboBox3.SelectedItem.ToString() == "MyMemory")//
             {
@@ -272,7 +272,7 @@ namespace WindowsFormsApplication2
                     textBox1.Text = textBox1.Text.Substring(0, 240);
                 }
                 textBox1.MaxLength = 240;
-                label6.Text = myString + "/32767 karaktera";
+                label6.Text = myString + "/500 bytes";
             }
         }
         private void ComboBox3_SelectedIndexChanged(object sender, EventArgs e)

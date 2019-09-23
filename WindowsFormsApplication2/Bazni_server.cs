@@ -18,11 +18,11 @@ namespace WindowsFormsApplication2
 
         readonly protected string originalniJezik;
         public abstract string SlanjeZahtjeva(string tekstZaPrijevod, string jezik);
-        public abstract string Obrada_odgovora(string spremnik);
+        public abstract string ObradaOdgovora(string spremnik);
         public string ZahtjevIOdgovor(string tekstZaPrijevod,string jezik)
         {
             string spremnik = this.SlanjeZahtjeva(tekstZaPrijevod, jezik);
-            spremnik = this.Obrada_odgovora(spremnik);
+            spremnik = this.ObradaOdgovora(spremnik);
             return spremnik;
         }
     }

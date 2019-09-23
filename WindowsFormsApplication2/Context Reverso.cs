@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WindowsFormsApplication2
@@ -24,21 +25,13 @@ namespace WindowsFormsApplication2
             tekstZaPrijevod = tekstZaPrijevod.Replace("+", "");
             tekstZaPrijevod = Uri.EscapeDataString(tekstZaPrijevod);
             tekstZaPrijevod = tekstZaPrijevod.Replace("%20", "+");
-            link1 = tekstZaPrijevod;
-            
-            for (i = 1; i < 10; i++)
-            {
-                kon = link1.IndexOf("+");
-                link1 = link1.Substring(kon + 1);
-                n = n + kon + 1;
-            }
             link = "http://context.reverso.net/translation/" + originalniJezik + "-" + jezik + "/" + tekstZaPrijevod;
             WebClient client = new WebClient();
             var link2 = client.DownloadData(link);
             link1 = Encoding.UTF8.GetString(link2);
             return link1;
         }
-        public override string Obrada_odgovora(string spremnik)
+        public override string ObradaOdgovora(string spremnik)
         {
             spremnik = link1;
             string rezac = "\">";

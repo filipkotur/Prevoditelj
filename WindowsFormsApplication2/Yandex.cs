@@ -15,7 +15,6 @@ namespace WindowsFormsApplication2
         public string rezultat;
         public override string SlanjeZahtjeva(string tekstZaPrijevod, string jezik)
         {
-
             using (var wb = new WebClient())
             {
                 var reqData = new NameValueCollection();
@@ -27,7 +26,6 @@ namespace WindowsFormsApplication2
                 {
                     var response = wb.UploadValues("https://translate.yandex.net/api/v1.5/tr.json/translate", "POST", reqData);
                     string responseInString = Encoding.UTF8.GetString(response);
-
                     var rootObject = JsonConvert.DeserializeObject<Translation>(responseInString);
                     rezultat = rootObject.text[0];
                     return rezultat;
@@ -36,11 +34,10 @@ namespace WindowsFormsApplication2
                 {
                     rezultat = ex.Message;
                     throw;
-                }
-            
+                }   
             }
         }
-        public override string Obrada_odgovora(string spremnik)
+        public override string ObradaOdgovora(string spremnik)
         {
             return spremnik;
         }

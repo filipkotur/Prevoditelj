@@ -27,7 +27,7 @@ namespace WindowsFormsApplication2
                 return "error";
             }
         }
-        public override string Obrada_odgovora(string spremnik)
+        public override string ObradaOdgovora(string spremnik)
         {
             return spremnik;
         }
