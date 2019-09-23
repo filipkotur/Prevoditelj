@@ -35,18 +35,9 @@ namespace WindowsFormsApplication2
             int zadnji = spremnik.IndexOf("match") - 4;
             spremnik = spremnik.Substring(1, zadnji);
             spremnik = String.Join(" ", spremnik.Split(' ').Reverse());
-            if (spremnik.IndexOf("\\u") != -1)
-            {              
-                    zadnji = link.IndexOf("\\u");
-                    link = link.Substring(zadnji);
-                    link1 = link.Substring(0, 6);
-                    link = link.Substring(6);
-                    string stari = link1;
-                    link1 = Regex.Replace(link1, @"\\u(?<Value>[a-fA-F0-9]{4})", m => {
-                        return ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString();
-                    });
-                    spremnik = spremnik.Replace(stari, link1);             
-            }
+            spremnik = Regex.Replace(spremnik, @"\\u(?<Value>[a-fA-F0-9]{4})", m => {
+                         return ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString();
+            });
             return spremnik;
         }
     }
