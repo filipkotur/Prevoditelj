@@ -24,6 +24,7 @@ namespace WindowsFormsApplication2
             string spremnik = this.SlanjeZahtjeva(tekstZaPrijevod, jezik);
             spremnik = this.ObradaOdgovora(spremnik);
             return spremnik;
-        }
+        }
+
     }
 }
