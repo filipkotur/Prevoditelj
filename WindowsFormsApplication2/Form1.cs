@@ -50,7 +50,7 @@ namespace WindowsFormsApplication2
             string originalni = "";
             string prevedeni = "";
             tekst = textBox1.Text;
-            
+            tekst = String.Join(" ", tekst.Split().Take(10).ToArray());
 
 
             switch (comboBox1.SelectedItem.ToString().Trim())
