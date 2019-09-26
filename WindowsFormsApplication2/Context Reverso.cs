@@ -20,7 +20,7 @@ namespace WindowsFormsApplication2
         public string result;
         public override string SlanjeZahtjeva(string tekstZaPrijevod, string jezik)
         {
-            
+            tekstZaPrijevod = String.Join(" ", tekstZaPrijevod.Split().Take(10).ToArray());
             tekstZaPrijevod = tekstZaPrijevod.Trim();
             tekstZaPrijevod = tekstZaPrijevod.Replace("+", "");
             tekstZaPrijevod = Uri.EscapeDataString(tekstZaPrijevod);

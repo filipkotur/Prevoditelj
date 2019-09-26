@@ -47,8 +47,8 @@
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(741, 54);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "Kod svih servera se zbog ograničenja u broju zahtjeva uzima maksimalno deset rije" +
-    "či ";
+            this.textBox1.Text = "Ako se koristi my memory i reverso context server onda se uzima maksimalno deset " +
+    "riječi zbog ograničenja u  anonimnosti zahtjeva";
             // 
             // textBox2
             // 

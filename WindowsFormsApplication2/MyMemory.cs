@@ -18,6 +18,7 @@ namespace WindowsFormsApplication2
         public string link1;
         public override string SlanjeZahtjeva(string tekstZaPrijevod, string jezik)
         {
+            tekstZaPrijevod = String.Join(" ", tekstZaPrijevod.Split().Take(10).ToArray());
             tekstZaPrijevod = Uri.EscapeDataString(tekstZaPrijevod);
             link = "https://api.mymemory.translated.net/get?q=" + tekstZaPrijevod + "&langpair=" + originalniJezik + "|" + jezik;
             WebClient client = new WebClient();
