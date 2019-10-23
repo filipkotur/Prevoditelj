@@ -136,13 +136,16 @@ namespace WindowsFormsApplication2
             }
             tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
             BazniServer prijevod;
-            if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst ==  null || string.IsNullOrWhiteSpace(tekst))
+            if (comboBox3.SelectedItem.ToString() != "Yandex" || comboBox3.SelectedItem.ToString() == "Bing")
             {
-                tekst = textBox1.Text;
-                textBox2.Text = tekst;
+                if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst == null || string.IsNullOrWhiteSpace(tekst))
+                {
+                    tekst = textBox1.Text;
+                    textBox2.Text = tekst;
 
+                }
             }
-            else 
+            else
             {
                 if (comboBox3.SelectedItem.ToString() == "Yandex")
                     prijevod = new Yandex();
@@ -150,7 +153,7 @@ namespace WindowsFormsApplication2
                     prijevod = new Bing();
                 else if (comboBox3.SelectedItem.ToString() == "MyMemory")
                     prijevod = new MyMemory(originalni);
-                else 
+                else
                     prijevod = new Context_Reverso(originalni);
                 textBox2.Text = prijevod.ZahtjevIOdgovor(tekst, prevedeni);
             }
