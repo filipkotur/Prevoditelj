@@ -136,7 +136,7 @@ namespace WindowsFormsApplication2
             }
             tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
             BazniServer prijevod;
-            if (comboBox3.SelectedItem.ToString() != "Yandex" || comboBox3.SelectedItem.ToString() == "Bing")
+            if (comboBox3.SelectedItem.ToString() != "Yandex" && comboBox3.SelectedItem.ToString() != "Bing")
             {
                 if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst == null || string.IsNullOrWhiteSpace(tekst))
                 {
