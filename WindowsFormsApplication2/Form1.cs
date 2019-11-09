@@ -136,15 +136,12 @@ namespace WindowsFormsApplication2
             }
             tekst = Regex.Replace(textBox1.Text, @"[\d-]", "");
             BazniServer prijevod;
-            if (comboBox3.SelectedItem.ToString() != "Yandex" && comboBox3.SelectedItem.ToString() != "Bing")
+            
+            if ((comboBox1.Enabled == false)&&((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst == null || string.IsNullOrWhiteSpace(tekst)))
             {
-                if ((comboBox2.SelectedItem.ToString() == comboBox1.SelectedItem.ToString()) || tekst == null || string.IsNullOrWhiteSpace(tekst))
-                {
                     tekst = textBox1.Text;
                     textBox2.Text = tekst;
-
-                }
-            }
+            }        
             else
             {
                 if (comboBox3.SelectedItem.ToString() == "Yandex")
